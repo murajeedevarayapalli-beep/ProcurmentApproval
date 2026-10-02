@@ -1,0 +1,13 @@
+services:
+  procurement-navigator:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      AI_MODE: ${AI_MODE:-demo}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DATA_DIR: /app/data
+    volumes:
+      - navigator-data:/app/data
+volumes:
+  navigator-data:

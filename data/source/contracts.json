@@ -1,0 +1,4 @@
+[
+ {"source_id":"CTR-100","supplier_id":"SUP-100","title":"Northstar Master Supply Agreement","owner":"Legal Operations","version":"1.0","effective_date":"2025-04-01","expiry_date":"2027-03-31","classification":"confidential","access_scope":"legal,procurement,approver","content":"Master supply agreement for office equipment is active through 2027-03-31. Standard terms apply. No contract ceiling is modeled in this demonstration."},
+ {"source_id":"CTR-200","supplier_id":"SUP-200","title":"CloudKite SaaS Agreement","owner":"Legal Operations","version":"2.0","effective_date":"2024-04-01","expiry_date":"2026-04-01","classification":"confidential","access_scope":"legal,procurement,security,approver","content":"SaaS agreement expired 2026-04-01. Renewal is in progress but no executed renewal evidence is present. Do not represent this agreement as currently active."}
+]

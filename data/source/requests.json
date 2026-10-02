@@ -1,0 +1,6 @@
+[
+ {"request_id":"PR-1042","requester_id":"demo-requester","department":"Engineering","description":"Workstation refresh for reliability engineering team","amount":4200,"currency":"USD","cost_center":"CC-ENG-410","supplier_id":"SUP-100","category":"office_equipment","urgency":"standard"},
+ {"request_id":"PR-1043","requester_id":"demo-requester","department":"Engineering","description":"Annual analytics platform subscription processing internal usage data","amount":18000,"currency":"USD","cost_center":"CC-ENG-410","supplier_id":"SUP-200","category":"restricted_software","urgency":"standard"},
+ {"request_id":"PR-1044","requester_id":"demo-requester","department":"Operations","description":"Field maintenance services renewal","amount":9000,"currency":"USD","cost_center":"CC-OPS-220","supplier_id":"SUP-300","category":"field_services","urgency":"urgent"},
+ {"request_id":"PR-1045","requester_id":"demo-requester","department":"Security","description":"Threat analysis data platform pilot","amount":26000,"currency":"USD","cost_center":"CC-SEC-115","supplier_id":"SUP-200","category":"restricted_software","urgency":"standard"}
+]
