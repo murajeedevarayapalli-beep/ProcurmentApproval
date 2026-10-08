@@ -35,7 +35,9 @@ The complete synthetic source pack is in [`data/source/`](data/source/README.md)
 
 `POST /api/requests/analyze` runs the graph and stops at `pending_human_review` or `blocked`. A human approver reviews the evidence and submits `POST /api/requests/{request_id}/decision`; only an authorized approver role can approve/reject. The API requires an idempotency key for decision writes. Missing, stale, conflicting, or insufficient evidence is surfaced as an exception; model text cannot override deterministic policy or budget findings.
 
-Key endpoints: `GET /api/health`, `GET /api/requests`, `GET /api/requests/{id}`, `POST /api/requests/analyze`, `POST /api/requests/{id}/decision`, `GET /api/metrics`, `GET /api/evaluations`.
+Key endpoints: `GET /api/health`, `GET /api/requests`, `GET /api/requests/{id}`, `POST /api/requests/analyze`, `POST /api/requests/{id}/decision`, `GET /api/metrics`, `GET /api/observability/logs`, `GET /api/observability/traces`, `GET /api/observability/drifts`, and `GET /api/evaluations`.
+
+The UI includes `/logs`, `/metrics`, `/traces`, and `/drifts`. Logs and traces use stored application audit events; workflow runs record LangGraph node durations. Metrics show request and decision counts plus analysis latency when start and completion events are available. The drift page reports current source freshness/expiry signals only; it does not claim statistical drift detection because the demo has no historical snapshots or baseline. Infrastructure/runtime logs remain in the hosting provider dashboard.
 
 ## Configuration
 
