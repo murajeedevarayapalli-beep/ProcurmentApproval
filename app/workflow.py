@@ -1,4 +1,4 @@
-import json, logging, uuid
+import json, logging, uuid, time
 from typing import TypedDict, Any
 from pathlib import Path
 from langgraph.graph import StateGraph, END
@@ -129,7 +129,22 @@ def finish(s):
 
 def build_graph():
     g=StateGraph(WorkflowState)
-    for name,fn in [("classify",classify),("retrieve",retrieve),("policy_budget",policy_budget),("supplier",supplier_tool),("route",route),("planner_agent",planning_agent),("finish",finish)]:g.add_node(name,fn)
+    def observed(name, fn):
+        def run(state):
+            request_id=state.get("request",{}).get("request_id","unknown")
+            trace_id=state.get("trace_id","unknown")
+            actor=state.get("actor","system")
+            started=time.perf_counter()
+            event(request_id,"workflow_node_started",actor,{"trace_id":trace_id,"node":name})
+            try:
+                result=fn(state)
+            except Exception as exc:
+                event(request_id,"workflow_node_failed",actor,{"trace_id":trace_id,"node":name,"error":str(exc)[:240],"duration_ms":round((time.perf_counter()-started)*1000,2)})
+                raise
+            event(request_id,"workflow_node_completed",actor,{"trace_id":trace_id,"node":name,"duration_ms":round((time.perf_counter()-started)*1000,2)})
+            return result
+        return run
+    for name,fn in [("classify",classify),("retrieve",retrieve),("policy_budget",policy_budget),("supplier",supplier_tool),("route",route),("planner_agent",planning_agent),("finish",finish)]:g.add_node(name,observed(name,fn))
     g.set_entry_point("classify");g.add_edge("classify","retrieve")
     g.add_edge("retrieve","policy_budget")
     g.add_edge("policy_budget","supplier");g.add_edge("supplier","route");g.add_edge("route","planner_agent");g.add_edge("planner_agent","finish");g.add_edge("finish",END)
@@ -140,5 +155,9 @@ GRAPH=build_graph()
 def analyze(request,actor,role):
     trace_id=str(uuid.uuid4())
     event(request["request_id"],"analysis_started",actor,{"trace_id":trace_id})
-    state=GRAPH.invoke({"request":request,"actor":actor,"role":role,"trace_id":trace_id,"attempts":0,"exceptions":[]})
-    return state["result"]
+    try:
+        state=GRAPH.invoke({"request":request,"actor":actor,"role":role,"trace_id":trace_id,"attempts":0,"exceptions":[]})
+        return state["result"]
+    except Exception as exc:
+        event(request["request_id"],"analysis_failed",actor,{"trace_id":trace_id,"error":str(exc)[:240]})
+        raise
